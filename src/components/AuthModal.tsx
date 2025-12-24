@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Smartphone, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "./ui/button";
 import { GlassCard } from "./ui/glass-card";
@@ -11,6 +12,8 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const [step, setStep] = useState<'role' | 'phone' | 'otp'>('role');
   const [selectedRole, setSelectedRole] = useState<'investor' | 'business'>('investor');
   const [countryCode, setCountryCode] = useState('+20');
@@ -45,8 +48,8 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
           {/* Header */}
           <div className="p-6 border-b border-white/10 flex justify-between items-center bg-[#020b1c]/50">
             <div>
-              <h2 className="text-xl font-serif font-bold text-white">Welcome to CHANCE</h2>
-              <p className="text-xs text-gray-400">The Premium Investment Gateway</p>
+              <h2 className="text-xl font-serif font-bold text-white">{t('auth.welcomeTitle')}</h2>
+              <p className="text-xs text-gray-400">{t('auth.subtitle')}</p>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
               <X className="w-5 h-5" />
@@ -55,36 +58,36 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
 
           <div className="p-8 bg-[#020b1c]">
             <AnimatePresence mode="wait">
-              
+
               {/* Step 1: Role Selection */}
               {step === 'role' && (
                 <motion.div
                   key="role"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  exit={{ opacity: 0, x: isRTL ? 20 : -20 }}
                   className="space-y-4"
                 >
-                  <p className="text-sm text-gray-300 mb-6 text-center">How would you like to proceed today?</p>
-                  
-                  <button 
+                  <p className="text-sm text-gray-300 mb-6 text-center">{t('auth.howToProceed')}</p>
+
+                  <button
                     onClick={() => handleRoleSelect('investor')}
                     className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group flex items-center justify-between"
                   >
-                    <div className="text-left">
-                      <h3 className="font-bold text-white group-hover:text-[#d4af37]">I'm an Investor</h3>
-                      <p className="text-xs text-gray-400">Looking for opportunities</p>
+                    <div className="text-start">
+                      <h3 className="font-bold text-white group-hover:text-[#d4af37]">{t('auth.imInvestor')}</h3>
+                      <p className="text-xs text-gray-400">{t('auth.lookingOpportunities')}</p>
                     </div>
                     <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-[#d4af37]" />
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => handleRoleSelect('business')}
                     className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group flex items-center justify-between"
                   >
-                    <div className="text-left">
-                      <h3 className="font-bold text-white group-hover:text-[#d4af37]">I'm a Business Owner</h3>
-                      <p className="text-xs text-gray-400">Looking for funding</p>
+                    <div className="text-start">
+                      <h3 className="font-bold text-white group-hover:text-[#d4af37]">{t('auth.imBusinessOwner')}</h3>
+                      <p className="text-xs text-gray-400">{t('auth.lookingFunding')}</p>
                     </div>
                     <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-[#d4af37]" />
                   </button>
@@ -95,36 +98,36 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
               {step === 'phone' && (
                 <motion.div
                   key="phone"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  exit={{ opacity: 0, x: isRTL ? 20 : -20 }}
                 >
                   <form onSubmit={handlePhoneSubmit} className="space-y-6">
                     <div className="text-center mb-6">
-                       <div className="w-12 h-12 rounded-full bg-[#d4af37]/10 mx-auto flex items-center justify-center mb-4 text-[#d4af37]">
-                         <Smartphone className="w-6 h-6" />
-                       </div>
-                       <h3 className="text-lg font-bold text-white">Enter Mobile Number</h3>
-                       <p className="text-xs text-gray-400">We'll send you a verification code.</p>
+                      <div className="w-12 h-12 rounded-full bg-[#d4af37]/10 mx-auto flex items-center justify-center mb-4 text-[#d4af37]">
+                        <Smartphone className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white">{t('auth.enterMobile')}</h3>
+                      <p className="text-xs text-gray-400">{t('auth.sendVerification')}</p>
                     </div>
 
                     <div className="flex gap-3">
                       <div className="relative">
-                        <select 
+                        <select
                           value={countryCode}
                           onChange={(e) => setCountryCode(e.target.value)}
-                          className="appearance-none bg-white/5 border border-white/10 rounded-lg py-3 pl-3 pr-8 text-white focus:outline-none focus:border-[#d4af37] h-12"
+                          className="appearance-none bg-white/5 border border-white/10 rounded-lg py-3 ps-3 pe-8 text-white focus:outline-none focus:border-[#d4af37] h-12"
                         >
                           <option value="+20">🇪🇬 +20</option>
                           <option value="+966">🇸🇦 +966</option>
                           <option value="+971">🇦🇪 +971</option>
                         </select>
-                        <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs">
+                        <div className="absolute end-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-xs">
                           ▼
                         </div>
                       </div>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         placeholder="1xxxxxxxxx"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -134,15 +137,15 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                     </div>
 
                     <Button type="submit" className="w-full bg-[#d4af37] text-[#020b1c] hover:bg-[#b5952f] h-12 font-bold">
-                      Send Verification Code
+                      {t('auth.sendCode')}
                     </Button>
-                    
-                    <button 
-                      type="button" 
+
+                    <button
+                      type="button"
                       onClick={() => setStep('role')}
                       className="w-full text-xs text-gray-500 hover:text-white"
                     >
-                      Back to Role Selection
+                      {t('auth.backToRole')}
                     </button>
                   </form>
                 </motion.div>
@@ -152,21 +155,21 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
               {step === 'otp' && (
                 <motion.div
                   key="otp"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  exit={{ opacity: 0, x: isRTL ? 20 : -20 }}
                 >
                   <form onSubmit={handleOtpSubmit} className="space-y-6">
                     <div className="text-center mb-6">
-                       <h3 className="text-lg font-bold text-white">Verify Account</h3>
-                       <p className="text-xs text-gray-400">Enter the 4-digit code sent to {countryCode} {phoneNumber}</p>
+                      <h3 className="text-lg font-bold text-white">{t('auth.verifyAccount')}</h3>
+                      <p className="text-xs text-gray-400">{t('auth.enterCode')} {countryCode} {phoneNumber}</p>
                     </div>
 
-                    <div className="flex justify-center gap-4">
+                    <div className="flex justify-center gap-4" dir="ltr">
                       {[1, 2, 3, 4].map((i) => (
-                        <input 
+                        <input
                           key={i}
-                          type="text" 
+                          type="text"
                           maxLength={1}
                           className="w-12 h-12 text-center text-xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#d4af37]"
                         />
@@ -174,15 +177,15 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                     </div>
 
                     <Button type="submit" className="w-full bg-[#d4af37] text-[#020b1c] hover:bg-[#b5952f] h-12 font-bold">
-                      Verify & Login
+                      {t('auth.verifyLogin')}
                     </Button>
-                    
-                    <button 
-                      type="button" 
+
+                    <button
+                      type="button"
                       onClick={() => setStep('phone')}
                       className="w-full text-xs text-gray-500 hover:text-white"
                     >
-                      Change Phone Number
+                      {t('auth.changePhone')}
                     </button>
                   </form>
                 </motion.div>
@@ -194,7 +197,7 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
           <div className="p-4 bg-[#010610] border-t border-white/5 text-center">
             <p className="text-[10px] text-gray-500 flex items-center justify-center gap-2">
               <ShieldCheck className="w-3 h-3" />
-              Secure Bank-Grade Encryption
+              {t('auth.secureEncryption')}
             </p>
           </div>
         </GlassCard>
@@ -202,3 +205,4 @@ export function AuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
     </div>
   );
 }
+
